@@ -1,23 +1,22 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import Dashboard from './containers/dashboard/Dashboard';
+import Homepage from './containers/homepage/Homepage';
 
 function App() {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    console.log(Object.keys(user).length);
+  }, [user])
+  
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        Object.keys(user).length === 0
+        ? <Homepage user={ user } setUser={ setUser } />
+        : <Dashboard user={ user } setUser={ setUser } />
+      }
     </div>
   );
 }
