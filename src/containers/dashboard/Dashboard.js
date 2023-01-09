@@ -1,4 +1,5 @@
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
+import { blue, grey } from '@mui/material/colors';
 import React, { useEffect, useState } from 'react';
 import Book from '../../components/book/Book';
 import Header from '../../components/header/Header';
@@ -182,65 +183,52 @@ export default function Dashboard({ user, setUser }) {
   }
 
   return (
-    <div className='main-container'>
+    <div className='main-container' style={{ height: '100%'}}>
       <Header user={ user } handleSignOut={ handleSignOut } />
-      <Grid 
-        container
-        spacing={5}
-        direction='row'
+      <Box 
         justifyContent='center'
-        style={{ minHeight: '100%'}}
+        style={{display:'flex', minHeight: '100%', width: '100vw'}}
+        sx={{ bgcolor: grey[800]}}
       >
-        <Grid item>
-          <Grid
-            container
-            spacing={ 2 }
-            direction='column'
+          <Box
+            sx={{ display: 'flex-inline', flexDirection: 'column', flex: 1 }}
             alignItems='center'
             justifyContent='center'
+            padding={ '1em 8em'}
           >
-            <Grid item>
-              <Typography variant="h4" margin='2em'>
+              <Typography variant="h4" color='secondary'>
                 Books
-                <hr></hr>
+                <hr color={grey[600]}></hr>
               </Typography>
-            </Grid>
-            <Grid item>
             { isAdmin() &&
               <span style={{marginTop: '10em'}} > 
                 <AdminPanel 
                   title={ bookTitle }
-                setTitle={ setBookTitle }
-                author={ bookAuthor }
-                setAuthor={ setBookAuthor }
-                year={ bookYear }
-                setYear={ setBookYear }
-                handleAdd={ handleAdd }
+                  setTitle={ setBookTitle }
+                  author={ bookAuthor }
+                  setAuthor={ setBookAuthor }
+                  year={ bookYear }
+                  setYear={ setBookYear }
+                  handleAdd={ handleAdd }
               /> 
               </span>
             }
-            </Grid>
             {
             books.map((book) => 
-              <Grid item>
-                <Book key={ book.id } type={ bookTypes.active } book={ book } isAdmin={ isAdmin() } user={ user } handleDelete={ handleDelete } handleBorrow={ handleBorrow }  />
-              </Grid>
+            <Box mt={ 1 }>
+              <Book key={ book.id } type={ bookTypes.active } book={ book } isAdmin={ isAdmin() } user={ user } handleDelete={ handleDelete } handleBorrow={ handleBorrow }  />
+            </Box>
             )}
-          </Grid>
-          <Grid
-            container
-            spacing={ 2 }
-            direction='column'
+          </Box>
+          <Box
+            sx={{ display: 'flex-inline', flexDirection: 'column', flex: 1 }}
             alignItems='center'
-            justifyContent='center'
+            padding={ '1em 8em'}
           >
-            <Grid item>
-              <Typography variant="h4" margin='2em'>
+              <Typography variant="h4" color='secondary'>
                 { isAdmin() ? 'Users' : 'Books borrowed' }
-                <hr></hr>
+                <hr color={grey[600]}></hr>
               </Typography>
-            </Grid>
-            <Grid item>
             { isAdmin() &&
               <span style={{marginTop: '10em'}} > 
                   <AdminPanelUser
@@ -254,25 +242,23 @@ export default function Dashboard({ user, setUser }) {
                 /> 
               </span>
             }
-            </Grid>
             { !isAdmin() ?
               userBooks.map((book) => 
-                <Grid item>
+                <Box mt={ 1 }>
                   <Book key={ book.id } type={ bookTypes.borrowed } book={ book } isAdmin={ isAdmin() } user={ user } handleReturn={ handleReturn } handleLonger= { handleLonger } userBorrows={ userBorrows } />
-                </Grid>
+                </Box>
               )
               :
-              users.map((user) => 
-                <Grid item>
-                  <User user={ user } handleDelete={ handleDeleteUser } />
-                </Grid>
+              users.filter(u => u.id !== user.id).map((u) => 
+              <Box mt={ 1 }>
+                <User user={ u } handleDelete={ handleDeleteUser } />
+              </Box>
               )}
-            </Grid>
-          </Grid>      
-        <Typography variant='h5' margin='2em' color={ 'error' }>
+          </Box>
+        <Typography variant='h5' mt={'2em'} color={ 'error' }>
           { message }
         </Typography>
-      </Grid>
+      </Box>      
     </div>
   )
 }
